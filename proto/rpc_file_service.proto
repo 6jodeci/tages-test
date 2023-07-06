@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package file;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = ".;pb";
+
+service FileService {
+  rpc UploadFile(stream UploadRequest) returns (UploadResponse) {}
+  rpc ListFiles(ListFilesRequest) returns (ListFilesResponse) {}
+  rpc DownloadFile(DownloadRequest) returns (stream DownloadResponse) {}
+}
+
+message UploadRequest {
+  bytes file_data = 1;
+  string file_name = 2;
+}
+
+message UploadResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ListFilesRequest {
+}
+
+message ListFilesResponse {
+  repeated FileInfo files = 1;
+}
+
+message FileInfo {
+  string file_name = 1;
+  google.protobuf.Timestamp created_at = 2;
+  google.protobuf.Timestamp updated_at = 3;
+}
+
+message DownloadRequest {
+  string file_name = 1;
+}
+
+message DownloadResponse {
+  bytes file_data = 1;
+}
